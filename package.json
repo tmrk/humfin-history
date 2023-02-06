@@ -1,7 +1,7 @@
 {
   "name": "humfin-history",
   "version": "1.0.0",
-  "description": "A graph showing the inlation-adjusted figures of IFRC's humanitarian spending since 1919",
+  "description": "A graph showing the inflation-adjusted figures of IFRC's humanitarian spending since 1919",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
@@ -32,6 +32,8 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
+    "@fontsource/noto-sans-mono": "^4.5.13",
+    "@fontsource/noto-serif": "^4.5.11",
     "chartist": "^1.3.0",
     "chartist-plugin-tooltips-updated": "^1.0.0",
     "exceljs": "^4.3.0",

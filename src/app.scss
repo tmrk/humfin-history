@@ -1,6 +1,7 @@
 * {
   margin: 0;
   padding: 0;
+  list-style-type: none;
 }
 
 html, body, #root {
@@ -19,17 +20,36 @@ body {
     text-align: center;
 
     h1 {
-      
+      padding-top: 20px;
+      font-family: "Noto Serif", Times, serif;
+      font-weight: 700;
+      font-size: 2rem;
+    }
+
+    h2 {
+      font-family: "Noto Serif", Times, serif;
+      font-weight: 400;
+      font-size: 1.2rem;
     }
   }
 
   #chart {
-    padding: 0 20px;
     flex: 1;
   }
 
   footer {
-    text-align: center;
+    padding-left: 50px;
+    font-family: "Noto Serif", Times, serif;
+    font-weight: 400;
+    font-size: 0.8rem;
+
+    a {
+      color: #000;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
   }
 }
 
@@ -46,10 +66,27 @@ body {
 
     .year {
       margin: 0 0 5px;
-      padding: 4px;
+      padding: 0 10px;
       border-radius: 12px;
       background: red;
       display: inline-block;
+      font-family: "Noto Serif", Times, serif;
+      font-weight: 400;
+    }
+
+    .meta {
+
+      .amount {
+        font-family: "Noto Sans Mono", Courier, monospace;
+        font-weight: 400;
+        font-size: 1rem;
+      }
+
+      .info {
+        font-family: "Noto Sans Mono", Courier, monospace;;
+        font-weight: 200;
+        font-size: 0.6rem;
+      }
     }
   }
 

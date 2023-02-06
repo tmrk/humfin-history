@@ -17,4 +17,4 @@ https://tmrk.github.io/humfin-history/
 
 * Add some basic UI (e.g. switch inflation adjustment on/off)
 * Add currency conversion
-* Improve design to make the page more shareable
+* Improve design

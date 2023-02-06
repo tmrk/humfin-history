@@ -71,7 +71,8 @@ function processAppeals (data) {
             el('div.meta', [
               el('div.amount', format(amount) + ' CHF'),
               el('div.info', 
-                inflationAdjusted ? 'Adjusted for inflation (' + year + '–' + lastYearInCPIdata + ')' 
+                inflationAdjusted && year < lastYearInCPIdata 
+                ? 'Adjusted for inflation (' + year + '–' + lastYearInCPIdata + ')' 
                 : 'Original amount (' + year + ')'
               )
             ])
@@ -82,16 +83,20 @@ function processAppeals (data) {
             value: amount
           })
         })
-      ]
+      ],
+      chartPadding: 20
     },
     {
       axisX: {
         labelInterpolationFnc: function(value) {
           if (value.toString().endsWith('0')) return value;
         }
-      },      axisY: {
+      },
+      axisY: {
         labelInterpolationFnc: function(value) {
-          return format(value / 1000000) + ' M';
+          if (value >= 1000000000) return (value / 1000000000) + 'B';
+          else if (value >= 1000000) return (value / 1000000) + 'M';
+          else if (value >= 1000) return (value / 1000) + 'k';
         }
       },
       low: 0,
@@ -99,7 +104,8 @@ function processAppeals (data) {
       plugins: [
         ChartistTooltip({
           anchorToPoint: false,
-          metaIsHTML: true
+          metaIsHTML: true,
+          appendToBody: false
         })
       ]
     }
