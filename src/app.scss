@@ -10,3 +10,51 @@ html, body, #root {
 body {
   background: #eee;
 }
+
+#root {
+  display: flex;
+  flex-direction: column;
+
+  header {
+    text-align: center;
+
+    h1 {
+      
+    }
+  }
+
+  #chart {
+    padding: 0 20px;
+    flex: 1;
+  }
+
+  footer {
+    text-align: center;
+  }
+}
+
+.chartist-tooltip {
+  background: #444;
+  color: #fff;
+  border-radius: 10px;
+
+  &:before {
+    border-top-color: #444;
+  }
+
+  .chartist-tooltip-meta {
+
+    .year {
+      margin: 0 0 5px;
+      padding: 4px;
+      border-radius: 12px;
+      background: red;
+      display: inline-block;
+    }
+  }
+
+  & > .chartist-tooltip-value,
+  & > br {
+    display: none;
+  }
+}
