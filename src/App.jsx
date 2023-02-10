@@ -2,7 +2,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import './App.css';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import { Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -10,7 +10,7 @@ import Switch from '@mui/material/Switch';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Link from '@mui/material/Link';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import CPIdata from './cached/CPIdata.json';
 import AppealData from './cached/AppealData_20230205.json';
 import { useState, useEffect } from 'react';
@@ -28,6 +28,7 @@ const theme = createTheme({
   palette: {
     primary: {
       main: '#ff0000',
+      light: '#ffaaaa',
       contrastText: '#fff',
     },
   },
@@ -70,6 +71,9 @@ const adjustForInflation = (amount, baseYear, targetYear) => {
 function App() {
   
   const [inflationAdjusted, setInflationAdjusted] = useState(false);
+  const [showFunded, setShowFunded] = useState(true);
+  const [showRequestedAsFundedPre1994, setShowRequestedAsFundedPre1994] = useState(true);
+  const [showRequested, setShowRequested] = useState(false);
   const [chartData, setChartData] = useState([]);
 
   const processAppeals = data => {
@@ -77,7 +81,13 @@ function App() {
       new Date(a.start_date).getTime() - new Date(b.start_date).getTime()
     );
 
-    const tempChartData = Array.from({ length: lastYearInAppealData - firstYearInAppealData + 1 }, (v, k) => ({ year: firstYearInAppealData + k, amount: 0, appeals: [] }))
+    const tempChartData = Array.from({ length: lastYearInAppealData - firstYearInAppealData + 1 }, (v, k) => ({ 
+      year: firstYearInAppealData + k, 
+      amountFunded: 0,
+      amountFundedAndRequestedPre1994: 0, 
+      amountRequested: 0,
+      appeals: [] 
+    }))
 
     console.log(filtered)
   
@@ -87,15 +97,19 @@ function App() {
       amounts.push(appeal.amount_requested);
   
       const year = new Date(appeal.start_date).getFullYear();
-      const amount = parseInt(appeal.amount_funded) || parseInt(appeal.amount_requested);
-  
-      if (amount) { // only add it if there is funds data
-        tempChartData.find(x => x.year === year).amount += inflationAdjusted ? adjustForInflation(amount, year) : amount;
-        tempChartData.find(x => x.year === year).appeals.push(appeal)
-      }
+      const amountFunded = parseInt(appeal.amount_funded);
+      const amountRequested = parseInt(appeal.amount_requested);
+      const amountFundedAndRequestedPre1994 = year < 1994 ? amountRequested : amountFunded;
+
+      const currentYear = tempChartData.find(x => x.year === year);
+      currentYear.amountFundedAndRequestedPre1994 += inflationAdjusted ? adjustForInflation(amountFundedAndRequestedPre1994, year) : amountFundedAndRequestedPre1994;
+      currentYear.amountFunded += inflationAdjusted ? adjustForInflation(amountFunded, year) : amountFunded;
+      currentYear.amountRequested += inflationAdjusted ? adjustForInflation(amountRequested, year) : amountRequested;
+      currentYear.appeals.push(appeal)
     }
     setChartData(tempChartData);
-    //console.log(tempChartData);
+    console.log(tempChartData);
+    console.log(theme.palette)
   }
 
   useEffect(() => {
@@ -109,7 +123,6 @@ function App() {
 
   return (<>
     <CssBaseline />
-
     <ThemeProvider theme={theme}>
       <Container maxWidth={false} disableGutters sx={{background: "#eee"}}>
       <div id="bgvideo">
@@ -119,29 +132,56 @@ function App() {
       }}><source src={BgVideo} type="video/mp4" /></video> */}
     </div>
         <Stack spacing={2} height="100vh" position="relative" zIndex="1">
-          <Box textAlign="center" height="40vh" display="flex" flexDirection="column" justifyContent="center" color="#fff" gap="3%">
-            <Typography variant="h1" sx={{fontFamily: 'Noto Serif', fontWeight: 700, fontSize: '3rem'}}>Humanitarian Finance History since 1919</Typography>
-            <Typography variant="h2" sx={{fontFamily: 'Noto Serif', fontWeight: 400, fontSize: '1.5rem'}}>Based on the funding records of the International Federation of Red Cross and Red Crescent Societies (IFRC)*</Typography>
+          <Box textAlign="center" height="30vh" display="flex" flexDirection="column" justifyContent="center" color="#fff" gap="3%">
+            <Typography variant="h1" sx={{fontFamily: 'Noto Serif', fontWeight: 700, fontSize: '2.8rem'}}>Humanitarian Finance History since 1919</Typography>
+            <Typography variant="h2" sx={{fontFamily: 'Noto Serif', fontWeight: 400, fontSize: '1.3rem'}}>Based on the funding records of the International Federation of Red Cross and Red Crescent Societies (IFRC)*</Typography>
           </Box>
           <Box display="flex" justifyContent="center">
-            <FormGroup>
+            <FormGroup sx={{display: "flex", flexDirection: "row", flexWrap: "nowrap"}}>
               <FormControlLabel control={
                 <Switch 
                   checked={ inflationAdjusted } 
                   onChange={() => setInflationAdjusted(!inflationAdjusted) }
                 />
               } label="Adjust for inflation" />
+              <FormControlLabel control={
+                <Switch 
+                  checked={ showFunded } 
+                  onChange={() => setShowFunded(!showFunded) }
+                />
+              } label="Show funded" />
+              <FormControlLabel control={
+                <Switch 
+                  disabled={!showFunded}
+                  checked={ showRequestedAsFundedPre1994 } 
+                  onChange={() => setShowRequestedAsFundedPre1994(!showRequestedAsFundedPre1994) }
+                />
+              } label="Show requested as funded (pre-1994)" />
+             <FormControlLabel control={
+                <Switch 
+                  checked={ showRequested } 
+                  onChange={() => setShowRequested(!showRequested) }
+                />
+              } label="Show requested" />
             </FormGroup>
           </Box>
           <Box flexGrow={1} p="0 40px 0 20px">
             <ResponsiveContainer>
-              <LineChart data={chartData}>
-                <Line type="monotone" dataKey="amount" stroke={theme.palette.primary.main} strokeWidth={3} />
-                <CartesianGrid stroke="#ccc" />
+              <AreaChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="year" />
                 <YAxis tickFormatter={formatAxisYTicks} />
                 <Tooltip formatter={formatTooltip} isAnimationActive={false} />
-              </LineChart>
+                <Legend />
+                  {showRequested 
+                    ? <Area type="monotone" dataKey="amountRequested" stackId="3" stroke={theme.palette.info.dark} strokeWidth={2} fill={theme.palette.info.light} /> 
+                    : ''}
+                  {showFunded && showRequestedAsFundedPre1994
+                    ? <Area type="monotone" dataKey="amountFundedAndRequestedPre1994" stackId="1" stroke={theme.palette.primary.main} strokeWidth={2} fill={theme.palette.primary.light} fillOpacity="1" />
+                    : showFunded
+                    ? <Area type="monotone" dataKey="amountFunded" stackId="2" stroke={theme.palette.primary.main} strokeWidth={2} fill={theme.palette.primary.light} fillOpacity="1" />
+                    : ''}
+              </AreaChart>
             </ResponsiveContainer>
           </Box>
           <Box textAlign="center">
