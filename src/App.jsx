@@ -12,17 +12,15 @@ import ListItem from '@mui/material/ListItem';
 import Link from '@mui/material/Link';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import CPIdata from './cached/CPIdata.json';
-import AppealData from './cached/AppealData_20230205.json';
+//import AppealData from './cached/AppealData_20230205.json';
 import { useState, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-//import BgVideo from './assets/bgvideo.mp4';
+import CircularProgress from '@mui/material/CircularProgress';
+import BgVideo from './assets/bgvideo.mp4';
 
 const startDates = [];
 const amounts = [];
 const lastYearInCPIdata = Math.max.apply(null, CPIdata.map(year => year.year));
-
-const firstYearInAppealData = Math.min.apply(null, AppealData.map(appeal => (new Date(appeal.start_date)).getFullYear()));
-const lastYearInAppealData = Math.max.apply(null, AppealData.map(appeal => (new Date(appeal.start_date)).getFullYear()));
 
 const theme = createTheme({
   palette: {
@@ -74,12 +72,16 @@ function App() {
   const [showFunded, setShowFunded] = useState(true);
   const [showRequestedAsFundedPre1994, setShowRequestedAsFundedPre1994] = useState(true);
   const [showRequested, setShowRequested] = useState(false);
+  const [rawData, setRawData] = useState();
   const [chartData, setChartData] = useState([]);
 
   const processAppeals = data => {
     const filtered = data.sort((a, b) => 
       new Date(a.start_date).getTime() - new Date(b.start_date).getTime()
     );
+
+    const firstYearInAppealData = Math.min.apply(null, data.map(appeal => (new Date(appeal.start_date)).getFullYear()));
+    const lastYearInAppealData = Math.max.apply(null, data.map(appeal => (new Date(appeal.start_date)).getFullYear()));
 
     const tempChartData = Array.from({ length: lastYearInAppealData - firstYearInAppealData + 1 }, (v, k) => ({ 
       year: firstYearInAppealData + k, 
@@ -89,8 +91,6 @@ function App() {
       appeals: [] 
     }))
 
-    console.log(filtered)
-  
     for (let i = 0; i < filtered.length; i++) {
       const appeal = filtered[i];
       startDates.push(appeal.start_date.split('-')[0]);
@@ -108,17 +108,21 @@ function App() {
       currentYear.appeals.push(appeal)
     }
     setChartData(tempChartData);
-    console.log(tempChartData);
-    console.log(theme.palette)
   }
 
   useEffect(() => {
-    processAppeals(AppealData);
-    /*
-    fetch('https://goadmin.ifrc.org/api/v2/appeal/?limit=10000')
-      .then(response => response.json())
-      .then(data => processAppeals(data.results));
-    */
+    //processAppeals(AppealData);
+    if (!rawData) {
+      fetch('https://goadmin.ifrc.org/api/v2/appeal/?limit=10000')
+        .then(response => response.json())
+        .then(data => {
+          setRawData(data.results);
+          return processAppeals(data.results);
+        });
+    } else {
+      processAppeals(rawData);
+    }
+    
   }, [inflationAdjusted]);
 
   return (<>
@@ -126,18 +130,18 @@ function App() {
     <ThemeProvider theme={theme}>
       <Container maxWidth={false} disableGutters sx={{background: "#eee"}}>
       <div id="bgvideo">
-      {/* <video autoPlay loop muted style={{
+      <video autoPlay playsInline loop muted style={{
             width: '100%', 
             objectFit: 'cover'
-      }}><source src={BgVideo} type="video/mp4" /></video> */}
+      }}><source src={BgVideo} type="video/mp4" /></video> 
     </div>
         <Stack spacing={2} height="100vh" position="relative" zIndex="1">
-          <Box textAlign="center" height="30vh" display="flex" flexDirection="column" justifyContent="center" color="#fff" gap="3%">
-            <Typography variant="h1" sx={{fontFamily: 'Noto Serif', fontWeight: 700, fontSize: '2.8rem'}}>Humanitarian Finance History since 1919</Typography>
-            <Typography variant="h2" sx={{fontFamily: 'Noto Serif', fontWeight: 400, fontSize: '1.3rem'}}>Based on the funding records of the International Federation of Red Cross and Red Crescent Societies (IFRC)*</Typography>
+          <Box textAlign="center" height="25vh" display="flex" flexDirection="column" justifyContent="center" color="#fff" gap="3%">
+            <Typography variant="h1" sx={{fontFamily: 'Noto Serif', fontWeight: 700, fontSize: '5.8vmin'}}>Humanitarian Finance History since 1919</Typography>
+            <Typography variant="h2" sx={{fontFamily: 'Noto Serif', fontWeight: 400, fontSize: '3vmin'}}>Based on the funding records of the International Federation of Red Cross and Red Crescent Societies (IFRC)*</Typography>
           </Box>
-          <Box display="flex" justifyContent="center">
-            <FormGroup sx={{display: "flex", flexDirection: "row", flexWrap: "nowrap"}}>
+          <Box display="flex" p="0 5%" justifyContent="center">
+            <FormGroup sx={{display: "flex", flexDirection: "row"}}>
               <FormControlLabel control={
                 <Switch 
                   checked={ inflationAdjusted } 
@@ -165,23 +169,29 @@ function App() {
               } label="Show requested" />
             </FormGroup>
           </Box>
-          <Box flexGrow={1} p="0 40px 0 20px">
+          <Box flexGrow={1} p="0 20px 0 10px">
             <ResponsiveContainer>
+            {chartData.length ? 
               <AreaChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="year" />
-                <YAxis tickFormatter={formatAxisYTicks} />
-                <Tooltip formatter={formatTooltip} isAnimationActive={false} />
-                <Legend />
-                  {showRequested 
-                    ? <Area type="monotone" dataKey="amountRequested" stackId="3" stroke={theme.palette.info.dark} strokeWidth={2} fill={theme.palette.info.light} /> 
-                    : ''}
-                  {showFunded && showRequestedAsFundedPre1994
-                    ? <Area type="monotone" dataKey="amountFundedAndRequestedPre1994" stackId="1" stroke={theme.palette.primary.main} strokeWidth={2} fill={theme.palette.primary.light} fillOpacity="1" />
-                    : showFunded
-                    ? <Area type="monotone" dataKey="amountFunded" stackId="2" stroke={theme.palette.primary.main} strokeWidth={2} fill={theme.palette.primary.light} fillOpacity="1" />
-                    : ''}
-              </AreaChart>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="year" />
+              <YAxis tickFormatter={formatAxisYTicks} />
+              <Tooltip formatter={formatTooltip} isAnimationActive={false} />
+              <Legend />
+                {showRequested 
+                  ? <Area type="monotone" dataKey="amountRequested" stackId="3" stroke={theme.palette.info.dark} strokeWidth={2} fill={theme.palette.info.light} /> 
+                  : ''}
+                {showFunded && showRequestedAsFundedPre1994
+                  ? <Area type="monotone" dataKey="amountFundedAndRequestedPre1994" stackId="1" stroke={theme.palette.primary.main} strokeWidth={2} fill={theme.palette.primary.light} fillOpacity="1" />
+                  : showFunded
+                  ? <Area type="monotone" dataKey="amountFunded" stackId="2" stroke={theme.palette.primary.main} strokeWidth={2} fill={theme.palette.primary.light} fillOpacity="1" />
+                  : ''}
+            </AreaChart>
+            : <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px'}}>
+                <CircularProgress />
+                <Typography><strong>Fetching appeal data from IFRC GO</strong></Typography>
+              </Box> 
+            }
             </ResponsiveContainer>
           </Box>
           <Box textAlign="center">
