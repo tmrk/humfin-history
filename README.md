@@ -15,6 +15,7 @@ https://tmrk.github.io/humfin-history/
 
 ## Planned
 
-* Add some basic UI (switch inflation adjustment on/off has been added, to be added: option to display detailed data, etc.)
+* Add some basic UI
 * Add currency conversion
-* Improve design
+* Improve design (incl. mobile responsiveness)
+* Restructure code

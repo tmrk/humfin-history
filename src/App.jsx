@@ -10,13 +10,19 @@ import Switch from '@mui/material/Switch';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Link from '@mui/material/Link';
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Tooltip, Legend, ReferenceLine, ReferenceArea } from 'recharts';
 import CPIdata from './cached/CPIdata.json';
 //import AppealData from './cached/AppealData_20230205.json';
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CircularProgress from '@mui/material/CircularProgress';
 import BgVideo from './assets/bgvideo.mp4';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 
 const startDates = [];
 const amounts = [];
@@ -29,6 +35,18 @@ const theme = createTheme({
       light: '#ffaaaa',
       contrastText: '#fff',
     },
+  },
+});
+
+const tableTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+  typography: {
+    fontFamily: [
+      '"Noto Sans Mono"',
+      'monospace'
+    ].join(','),
   },
 });
 
@@ -72,6 +90,8 @@ function App() {
   const [showFunded, setShowFunded] = useState(true);
   const [showRequestedAsFundedPre1994, setShowRequestedAsFundedPre1994] = useState(true);
   const [showRequested, setShowRequested] = useState(false);
+  const [displayReferences, setDisplayReferences] = useState(false);
+  const [showDataTable, setShowDataTable] = useState(false);
   const [rawData, setRawData] = useState();
   const [chartData, setChartData] = useState([]);
 
@@ -110,7 +130,7 @@ function App() {
     setChartData(tempChartData);
   }
 
-  useEffect(() => {
+  useMemo(() => {
     //processAppeals(AppealData);
     if (!rawData) {
       fetch('https://goadmin.ifrc.org/api/v2/appeal/?limit=10000')
@@ -122,13 +142,12 @@ function App() {
     } else {
       processAppeals(rawData);
     }
-    
   }, [inflationAdjusted]);
 
   return (<>
     <CssBaseline />
     <ThemeProvider theme={theme}>
-      <Container maxWidth={false} disableGutters sx={{background: "#eee"}}>
+      <Container maxWidth={false} disableGutters sx={{background: '#eee'}}>
       <div id="bgvideo">
       <video autoPlay playsInline loop muted style={{
             width: '100%', 
@@ -144,29 +163,41 @@ function App() {
             <FormGroup sx={{display: "flex", flexDirection: "row"}}>
               <FormControlLabel control={
                 <Switch 
-                  checked={ inflationAdjusted } 
+                  checked={ inflationAdjusted } disabled={!rawData}
                   onChange={() => setInflationAdjusted(!inflationAdjusted) }
                 />
               } label="Adjust for inflation" />
               <FormControlLabel control={
                 <Switch 
-                  checked={ showFunded } 
+                  checked={ showFunded } disabled={!rawData}
                   onChange={() => setShowFunded(!showFunded) }
                 />
               } label="Show funded" />
               <FormControlLabel control={
                 <Switch 
-                  disabled={!showFunded}
+                  disabled={!showFunded || !rawData}
                   checked={ showRequestedAsFundedPre1994 } 
                   onChange={() => setShowRequestedAsFundedPre1994(!showRequestedAsFundedPre1994) }
                 />
               } label="Show requested as funded (pre-1994)" />
              <FormControlLabel control={
                 <Switch 
-                  checked={ showRequested } 
+                  checked={ showRequested } disabled={!rawData}
                   onChange={() => setShowRequested(!showRequested) }
                 />
               } label="Show requested" />
+             <FormControlLabel control={
+                <Switch 
+                  checked={ displayReferences } disabled={!rawData}
+                  onChange={() => setDisplayReferences(!displayReferences) }
+                />
+              } label="Display references" />
+             <FormControlLabel control={
+                <Switch 
+                  checked={ showDataTable } disabled={!rawData}
+                  onChange={() => setShowDataTable(!showDataTable) }
+                />
+              } label="Show data table below" />
             </FormGroup>
           </Box>
           <Box flexGrow={1} p="0 20px 0 10px">
@@ -176,7 +207,11 @@ function App() {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="year" />
               <YAxis tickFormatter={formatAxisYTicks} />
-              <Tooltip formatter={formatTooltip} isAnimationActive={false} />
+              {displayReferences ? <>
+                <ReferenceArea x1={1939} x2={1944} label="WW2" />
+                <ReferenceLine x={2004} label="Indian Ocean tsunami of 2004" />
+              </> : null}
+              <Tooltip formatter={formatTooltip} isAnimationActive={true} />
               <Legend />
                 {showRequested 
                   ? <Area type="monotone" dataKey="amountRequested" stackId="3" stroke={theme.palette.info.dark} strokeWidth={2} fill={theme.palette.info.light} /> 
@@ -197,30 +232,57 @@ function App() {
           <Box textAlign="center">
             <Typography variant="body2" sx={{fontFamily: 'Noto Serif', fontWeight: 400}}>* This website and this presentation are not affiliated with the IFRC</Typography>
             <List dense sx={{display: "flex", flexDirection: "row", justifyContent: 'center'}}>
-              <ListItem sx={{width: 'auto', textAlign: 'center'}}><Typography variant="body2" sx={{fontFamily: 'Noto Serif', fontWeight: 400}}>Humanitarian appeal data from <Link href="https://goadmin.ifrc.org/docs/#api-v2-appeal-list">IFRC GO</Link></Typography></ListItem>
-              <ListItem sx={{width: 'auto', textAlign: 'center'}}><Typography variant="body2" sx={{fontFamily: 'Noto Serif', fontWeight: 400}}>Inflation (CPI) data from the <Link href="https://www.bfs.admin.ch/asset/de/cc-d-05.02.08">Federal Statistical Office of Switzerland</Link></Typography></ListItem>
-              <ListItem sx={{width: 'auto', textAlign: 'center'}}><Typography variant="body2" sx={{fontFamily: 'Noto Serif', fontWeight: 400}}>Code on <Link href="https://github.com/tmrk/humfin-history">GitHub</Link></Typography></ListItem>
+              <ListItem sx={{width: 'auto', textAlign: 'center'}}><Typography variant="body2">Humanitarian appeal data from <Link href="https://goadmin.ifrc.org/docs/#api-v2-appeal-list">IFRC GO</Link></Typography></ListItem>
+              <ListItem sx={{width: 'auto', textAlign: 'center'}}><Typography variant="body2">Inflation (CPI) data from the <Link href="https://www.bfs.admin.ch/asset/de/cc-d-05.02.08">Federal Statistical Office of Switzerland</Link></Typography></ListItem>
+              <ListItem sx={{width: 'auto', textAlign: 'center'}}><Typography variant="body2">Code on <Link href="https://github.com/tmrk/humfin-history">GitHub</Link></Typography></ListItem>
             </List>
           </Box>
         </Stack>
-        {/*
-        <Stack p={5}>
-          {
-            AppealData.map((appeal, index) => 
-              <Box fontFamily="Noto Sans Mono" key={index}>{
-                (new Date(appeal.start_date)).toISOString().split('T')[0] + ' - ' +
-                (new Date(appeal.end_date)).toISOString().split('T')[0] + ' | ' +
-                appeal.country.name + ' | ' +
-                'REQUESTED: ' + format(appeal.amount_requested) +
-                ' | FUNDED: ' + format(appeal.amount_funded)
-              }</Box>
-            )
-          }
-        </Stack>
-        */}
+        
+        {showDataTable && rawData ? 
+          <ThemeProvider theme={tableTheme}>
+          <TableContainer sx={{ overflowX: "initial", background: '#000' }}>
+            <Table stickyHeader size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Code</TableCell>
+                  <TableCell>Start</TableCell>
+                  <TableCell>End</TableCell>
+                  <TableCell>Country</TableCell>
+                  <TableCell>Type</TableCell>
+                  <TableCell>Crisis</TableCell>
+                  <TableCell align="right">Requested</TableCell>
+                  <TableCell align="right">Funded</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rawData.map(appeal => (
+                  <TableRow
+                    key={appeal.aid}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell>{appeal.aid}</TableCell>
+                    <TableCell>{appeal.code}</TableCell>
+                    <TableCell>{(new Date(appeal.start_date)).toISOString().split('T')[0]}</TableCell>
+                    <TableCell>{(new Date(appeal.end_date)).toISOString().split('T')[0]}</TableCell>
+                    <TableCell>{appeal.country.name}</TableCell>
+                    <TableCell>{appeal.atype}</TableCell>
+                    <TableCell>{appeal.name}</TableCell>
+                    <TableCell align="right">{format(appeal.amount_requested)}</TableCell>
+                    <TableCell align="right">{format(appeal.amount_funded)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          </ThemeProvider>
+        : null}
+        
       </Container>
-    </ThemeProvider>
-  </>);
+    </ThemeProvider> 
+  </>
+  );
 }
 
 export default App;
