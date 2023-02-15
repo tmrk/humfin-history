@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/humfin-history/static/css/main.5084d6a5.css",
-    "main.js": "/humfin-history/static/js/main.f8743b5f.js",
+    "main.js": "/humfin-history/static/js/main.b0f55c46.js",
     "static/media/bgvideo.mp4": "/humfin-history/static/media/bgvideo.7b11fe08cbffd5ffd8f1.mp4",
     "static/media/bgvideo.png": "/humfin-history/static/media/bgvideo.88df88566f5296777358.png",
     "static/media/noto-serif-all-700-normal.woff": "/humfin-history/static/media/noto-serif-all-700-normal.61623f1ca1aa5f92ecda.woff",
@@ -62,10 +62,10 @@
     "static/media/roboto-greek-ext-700-normal.woff2": "/humfin-history/static/media/roboto-greek-ext-700-normal.bd9854c751441ccc1a70.woff2",
     "index.html": "/humfin-history/index.html",
     "main.5084d6a5.css.map": "/humfin-history/static/css/main.5084d6a5.css.map",
-    "main.f8743b5f.js.map": "/humfin-history/static/js/main.f8743b5f.js.map"
+    "main.b0f55c46.js.map": "/humfin-history/static/js/main.b0f55c46.js.map"
   },
   "entrypoints": [
     "static/css/main.5084d6a5.css",
-    "static/js/main.f8743b5f.js"
+    "static/js/main.b0f55c46.js"
   ]
 }
