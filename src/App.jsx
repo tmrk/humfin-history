@@ -12,7 +12,7 @@ import ListItem from '@mui/material/ListItem';
 import Link from '@mui/material/Link';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Tooltip, Legend, ReferenceLine, ReferenceArea } from 'recharts';
 import CPIdata from './cached/CPIdata.json';
-//import AppealData from './cached/AppealData_20230205.json';
+//import CachedAppealData from './cached/AppealData_20230928.json';
 import { useState, useMemo } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -23,6 +23,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import References from './references';
 
 const startDates = [];
 const amounts = [];
@@ -131,7 +132,8 @@ function App() {
   }
 
   useMemo(() => {
-    //processAppeals(AppealData);
+    //setRawData(CachedAppealData);
+    //processAppeals(CachedAppealData);
     if (!rawData) {
       fetch('https://goadmin.ifrc.org/api/v2/appeal/?limit=10000')
         .then(response => response.json())
@@ -207,10 +209,29 @@ function App() {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="year" />
               <YAxis tickFormatter={formatAxisYTicks} />
-              {displayReferences ? <>
-                <ReferenceArea x1={1939} x2={1944} label="WW2" />
-                <ReferenceLine x={2004} label="Indian Ocean tsunami of 2004" />
-              </> : null}
+              {displayReferences ? 
+              <>{ 
+                References.map((reference, index) =>
+                {
+                  const props = { key: index, label: { value: reference.label, position: "top", offset: -30, y: 15,angle: 45, style: { fontSize: "0.7em" } } };
+                  for (const key in reference) {
+                    if (Object.hasOwnProperty.call(reference, key) && key !== "tag" && key !== "label") {
+                      props[key] = reference[key];
+                    }
+                  }
+                  let Reference;
+                  switch (reference.tag) {
+                    case "area":
+                      Reference = <ReferenceArea {...props} />
+                      break;             
+                    default:
+                      Reference = <ReferenceLine {...props} />
+                      break;
+                  }
+                  return Reference;
+                })
+              }</>
+              : null}
               <Tooltip formatter={formatTooltip} isAnimationActive={true} />
               <Legend />
                 {showRequested 

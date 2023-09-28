@@ -1,0 +1,58 @@
+[
+  {
+    "tag": "area",
+    "label": "WW2",
+    "x1": 1939,
+    "x2": 1944
+  },
+  {
+    "tag": "line",
+    "label": "Somalia",
+    "x": 1991
+  },
+  {
+    "tag": "line",
+    "label": "Bosnia",
+    "x": 1992
+  },
+  {
+    "tag": "line",
+    "label": "Rwanda",
+    "x": 1994
+  },
+  {
+    "tag": "line",
+    "label": "Mitch",
+    "x": 1998
+  },
+  {
+    "tag": "line",
+    "label": "Tsunami",
+    "x": 2004
+  },
+  {
+    "tag": "line",
+    "label": "Pakistan",
+    "x": 2005
+  },
+  {
+    "tag": "line",
+    "label": "Myanmar",
+    "x": 2008
+  },
+  {
+    "tag": "line",
+    "label": "Haiti",
+    "x": 2010
+  },
+  {
+    "tag": "line",
+    "label": "HoA",
+    "x": 2011
+  },
+  {
+    "tag": "line",
+    "label": "Sahel",
+    "x": 2012
+  }
+]

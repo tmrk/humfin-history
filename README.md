@@ -15,7 +15,6 @@ https://tmrk.github.io/humfin-history/
 
 ## Planned
 
-* Add some basic UI
 * Add currency conversion
 * Improve design (incl. mobile responsiveness)
 * Restructure code
