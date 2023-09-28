@@ -9,6 +9,8 @@ Although only one data source is used (i.e. the appeals data exposed by the [IFR
 
 To adjust for inflation, the CPI data published by the [Federal Statistical Office of Switzerland](https://www.bfs.admin.ch/asset/de/cc-d-05.02.08) is used.
 
+Read more about this project here: https://x.com/tmarki/status/1707340356226810195
+
 ## Demo
 
 https://tmrk.github.io/humfin-history/
