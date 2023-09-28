@@ -9,7 +9,10 @@ Although only one data source is used (i.e. the appeals data exposed by the [IFR
 
 To adjust for inflation, the CPI data published by the [Federal Statistical Office of Switzerland](https://www.bfs.admin.ch/asset/de/cc-d-05.02.08) is used.
 
-Read more about this project here: https://x.com/tmarki/status/1707340356226810195
+Read more about this project here: 
+
+* https://x.com/tmarki/status/1707340356226810195
+* https://medium.com/@tmarki/how-much-are-we-really-spending-on-disaster-response-8f6eb9d5da33
 
 ## Demo
 
