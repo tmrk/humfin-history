@@ -1,0 +1,136 @@
+[
+  {
+    "id": "volga-1921",
+    "year": 1921,
+    "label": "Volga famine",
+    "title": "Famine on the Volga",
+    "blurb": "The young League of Red Cross Societies asks for 180 million francs for famine relief in Russia — close to a billion in 2025 francs, and its first great test."
+  },
+  {
+    "id": "kanto-1923",
+    "year": 1923,
+    "label": "Kantō earthquake",
+    "title": "Great Kantō earthquake, Japan",
+    "blurb": "Tokyo and Yokohama burn after the quake. The 277-million-franc appeal — almost 1.9 billion in 2025 francs — is bigger in real terms than any appeal launched since 1945."
+  },
+  {
+    "id": "ww2-1939",
+    "year": 1942,
+    "span": [1939, 1945],
+    "label": "Second World War",
+    "title": "The Second World War",
+    "blurb": "Wartime relief actions are recorded under their 1939 start dates — 815 million francs, about 6.5 billion in 2025 francs, still the biggest year in this record. The empty years 1940–44 are an artefact of that bookkeeping."
+  },
+  {
+    "id": "ethiopia-1985",
+    "year": 1985,
+    "label": "Ethiopia famine",
+    "title": "Famine in Ethiopia",
+    "blurb": "Drought appeals for Ethiopia and its neighbours drive the mid-1980s bump — the decade when African food crises became the system's main work."
+  },
+  {
+    "id": "armenia-1988",
+    "year": 1988,
+    "label": "Armenia earthquake",
+    "title": "Spitak earthquake, Armenia",
+    "blurb": "A 95-million-franc appeal for the earthquake in Soviet Armenia — one of the last great relief operations of the Cold War, recorded under the USSR."
+  },
+  {
+    "id": "postwall-1992",
+    "year": 1992,
+    "label": "Somalia · Bosnia",
+    "title": "After the Wall: Somalia, Bosnia, the former USSR",
+    "blurb": "State collapse replaces superpower order: famine in Somalia, war in Bosnia and a 136-million-franc appeal for former Yugoslavia keep asks high through 1991–93."
+  },
+  {
+    "id": "rwanda-1994",
+    "year": 1994,
+    "label": "Rwanda",
+    "title": "Genocide in Rwanda",
+    "blurb": "Appeals for Rwanda and the refugee exodus into Goma. 1994 is also the first year GO records what donors actually gave — everything earlier shows only the ask."
+  },
+  {
+    "id": "mitch-1998",
+    "year": 1998,
+    "label": "Hurricane Mitch",
+    "title": "Hurricane Mitch, Central America",
+    "blurb": "Mitch stalls over Honduras and Nicaragua and kills over 11,000 people. 1998 is also a rare year when overall funding nearly matched the ask."
+  },
+  {
+    "id": "izmit-1999",
+    "year": 1999,
+    "label": "İzmit · Kosovo",
+    "title": "İzmit earthquake and Kosovo",
+    "blurb": "A 65-million-franc appeal for the Marmara earthquake in Türkiye lands in the same year as the Kosovo displacement crisis, pushing asks past 300 million."
+  },
+  {
+    "id": "tsunami-2004",
+    "year": 2004,
+    "label": "Indian Ocean tsunami",
+    "title": "Indian Ocean tsunami",
+    "blurb": "A 671-million-franc appeal — the Movement's largest of the modern era — and donors nearly covered it. 2004 remains the high-water mark of public generosity."
+  },
+  {
+    "id": "kashmir-2005",
+    "year": 2005,
+    "label": "Kashmir earthquake",
+    "title": "Kashmir earthquake, Pakistan",
+    "blurb": "Months after the tsunami, a 168-million-franc appeal for the Pakistan earthquake tests whether donor generosity can strike twice in one year."
+  },
+  {
+    "id": "sichuan-2008",
+    "year": 2008,
+    "label": "Sichuan · Nargis",
+    "title": "Sichuan earthquake and Cyclone Nargis",
+    "blurb": "Two catastrophes weeks apart — a 153-million-franc appeal for China and a major operation in Myanmar — make 2008 the busiest year of its decade."
+  },
+  {
+    "id": "haiti-2010",
+    "year": 2010,
+    "label": "Haiti earthquake",
+    "title": "Haiti earthquake",
+    "blurb": "A 274-million-franc appeal for Port-au-Prince. 2010 is the rare year in the whole record when money given outran money asked."
+  },
+  {
+    "id": "syria-2012",
+    "year": 2012,
+    "label": "Syria",
+    "title": "Syria: a decade-long emergency begins",
+    "blurb": "A 209-million-franc complex-emergency appeal opens what becomes a permanent line in the ledger — Syria appears among the largest asks for the next decade."
+  },
+  {
+    "id": "ebola-2014",
+    "year": 2014,
+    "label": "Ebola",
+    "title": "Ebola in West Africa",
+    "blurb": "Parallel appeals for Sierra Leone, Liberia and Guinea mark the first time an epidemic — not an earthquake or a storm — drives the year's funding."
+  },
+  {
+    "id": "rohingya-2017",
+    "year": 2017,
+    "label": "Rohingya exodus",
+    "title": "Rohingya exodus to Bangladesh",
+    "blurb": "A 198-million-franc appeal for population movement into Cox's Bazar — the largest displacement appeal the Movement had launched to that point."
+  },
+  {
+    "id": "covid-2020",
+    "year": 2020,
+    "label": "COVID-19",
+    "title": "COVID-19 pandemic",
+    "blurb": "A 670-million-franc global appeal — the only one in this record addressed to everywhere at once. Barely two-thirds of the year's asks were met."
+  },
+  {
+    "id": "ukraine-2022",
+    "year": 2022,
+    "label": "Ukraine",
+    "title": "Ukraine and impacted countries",
+    "blurb": "At 800 million francs, the largest single appeal ever recorded in GO — yet in 2025 francs it is still well under half the size of the 1923 Kantō appeal."
+  },
+  {
+    "id": "turkiye-2023",
+    "year": 2023,
+    "label": "Türkiye–Syria quakes",
+    "title": "Türkiye–Syria earthquakes",
+    "blurb": "Twin quakes kill nearly 60,000 people. Asks approach a billion francs for the year, but barely two-fifths arrive — one of the widest funding gaps in the record."
+  }
+]

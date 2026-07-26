@@ -42,5 +42,4 @@ npm run deploy   # publish dist/ to the gh-pages branch
 ## Planned
 
 * Add currency conversion
-* Improve design (incl. mobile responsiveness)
-* Restructure code
+* Offline fallback snapshot of the appeal data
