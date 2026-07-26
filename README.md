@@ -18,6 +18,19 @@ Read more about this project here:
 
 https://tmrk.github.io/humfin-history/
 
+## Development
+
+Requires Node.js 20.19 or newer.
+
+```sh
+npm install
+npm start        # dev server (Vite)
+npm test         # unit tests (Vitest)
+npm run build    # production build to dist/
+npm run preview  # serve the production build locally
+npm run deploy   # publish dist/ to the gh-pages branch
+```
+
 ## Planned
 
 * Add currency conversion
