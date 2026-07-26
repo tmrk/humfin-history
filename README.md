@@ -14,6 +14,14 @@ Read more about this project here:
 * https://x.com/tmarki/status/1707340356226810195
 * https://medium.com/@tmarki/how-much-are-we-really-spending-on-disaster-response-8f6eb9d5da33
 
+## Methodology and limitations
+
+* Every appeal in GO (DREF, Emergency Appeal, International Appeal, Forecast Based Action) is counted in the calendar year of its start date, using the CHF amounts recorded in the database. Multi-year operations are not spread over their duration, which is probably why 1940–1944 show no activity while 1939 and 1945 spike.
+* Funding coverage (`amount_funded`) only exists from 1994 onwards; every earlier appeal has it recorded as zero. The "Show requested as funded (pre-1994)" switch substitutes requested amounts for those years — bear in mind that more may have been requested than donors actually covered.
+* All DREF records between 1997 and 2003 carry zero amounts in GO, so funding from that period is underrepresented.
+* Inflation adjustment chains the Swiss CPI's original base series (going back to June 1914) and expresses amounts in the francs of the latest year covered by the bundled index (currently 2025). Regenerate the index cache from the FSO source with `npm run update-cpi`.
+* This is a single-source dataset: it reflects the funding history of the Red Cross Red Crescent Movement's international emergency operations, not total global humanitarian spending.
+
 ## Demo
 
 https://tmrk.github.io/humfin-history/
