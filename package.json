@@ -25,6 +25,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "update-cpi": "node scripts/update-cpi.mjs",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },

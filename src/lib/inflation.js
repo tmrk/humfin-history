@@ -2,6 +2,7 @@ import CPIdata from '../cached/CPIdata.json';
 
 // Swiss CPI annual averages on every original base series (1914-06-01 ... 2020-12-01),
 // as published by the Federal Statistical Office (asset cc-d-05.02.08).
+// Regenerate src/cached/CPIdata.json with `npm run update-cpi`.
 
 export const firstYearInCPIdata = Math.min(...CPIdata.map(entry => entry.year));
 export const lastYearInCPIdata = Math.max(...CPIdata.map(entry => entry.year));
