@@ -13,7 +13,7 @@
     "@fontsource/noto-serif": "^5.0.12",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "recharts": "^2.8.0"
+    "recharts": "^3.10.1"
   },
   "scripts": {
     "start": "vite",

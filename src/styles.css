@@ -319,6 +319,18 @@ a:hover {
   height: clamp(340px, 58vh, 620px);
 }
 
+/* Recharts 3 wraps chart layers in focusable z-index groups; clicking an
+   event pin focuses one and Chrome outlines the whole plot area. Keyboard
+   focus lands on the chart surface itself, which keeps a visible ring. */
+.chart-body g[class*='recharts-zIndex-layer']:focus {
+  outline: none;
+}
+
+.chart-body svg.recharts-surface:focus-visible {
+  outline: 2px solid rgba(243, 238, 232, 0.45);
+  outline-offset: 4px;
+}
+
 .chart-note {
   display: flex;
   flex-wrap: wrap;
