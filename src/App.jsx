@@ -160,10 +160,9 @@ function App() {
               <XAxis dataKey="year" />
               <YAxis tickFormatter={formatAxisYTicks} />
               {displayReferences ?
-              <>{
                 References.map((reference, index) =>
                 {
-                  const props = { key: index, label: { value: reference.label, position: "top", offset: -30, y: 15,angle: 45, style: { fontSize: "0.7em" } } };
+                  const props = { label: { value: reference.label, position: "top", offset: -30, y: 15,angle: 45, style: { fontSize: "0.7em" } } };
                   for (const key in reference) {
                     if (Object.hasOwnProperty.call(reference, key) && key !== "tag" && key !== "label") {
                       props[key] = reference[key];
@@ -172,15 +171,14 @@ function App() {
                   let Reference;
                   switch (reference.tag) {
                     case "area":
-                      Reference = <ReferenceArea {...props} />
+                      Reference = <ReferenceArea key={index} {...props} />
                       break;
                     default:
-                      Reference = <ReferenceLine {...props} />
+                      Reference = <ReferenceLine key={index} {...props} />
                       break;
                   }
                   return Reference;
                 })
-              }</>
               : null}
               <Tooltip formatter={formatTooltip} isAnimationActive={true} />
               <Legend />
