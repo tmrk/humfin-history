@@ -55,20 +55,20 @@ function Hero({ appeals, yearlyTotals }) {
         <div className="hero__rule" aria-hidden="true" />
         <p className="hero__dek">
           A century of emergency appeals by the world&rsquo;s largest humanitarian
-          network — what was asked for, what was given, and the crises behind
+          network: what was asked for, what was given, and the crises behind
           every spike.
         </p>
         <dl className="hero__stats">
           <div className="hero__stat">
-            <dd>{stats ? stats.count.toLocaleString('en-GB') : '—'}</dd>
+            <dd>{stats ? stats.count.toLocaleString('en-GB') : '…'}</dd>
             <dt>appeals recorded</dt>
           </div>
           <div className="hero__stat">
-            <dd>{stats ? stats.lastYear - stats.firstYear : '—'}</dd>
+            <dd>{stats ? stats.lastYear - stats.firstYear : '…'}</dd>
             <dt>years of records</dt>
           </div>
           <div className="hero__stat">
-            <dd>{stats ? `${formatCompact(stats.peakValue)} CHF` : '—'}</dd>
+            <dd>{stats ? `${formatCompact(stats.peakValue)} CHF` : '…'}</dd>
             <dt>
               {stats
                 ? `asked in ${stats.peakYear}, the peak year (${lastYearInCPIdata} francs)`

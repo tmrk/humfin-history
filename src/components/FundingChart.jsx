@@ -88,11 +88,11 @@ const ChartTooltip = ({ active, payload, label, inflationAdjusted, substitutePre
       ))}
       <p className="tip__meta">
         {appealsOfYear.length.toLocaleString('en-GB')} appeal{appealsOfYear.length === 1 ? '' : 's'}
-        {largest ? ` · largest: ${largest.name.trim()} (${largest.country?.name ?? '—'})` : ''}
+        {largest ? ` · largest: ${largest.name.trim()} (${largest.country?.name ?? 'unknown'})` : ''}
       </p>
       {preCutoff && substitutePre1994 ? (
         <p className="tip__meta tip__meta--note">
-          * requested shown — no funding records before {FIRST_YEAR_WITH_FUNDING_DATA}
+          * requested shown; no funding records before {FIRST_YEAR_WITH_FUNDING_DATA}
         </p>
       ) : null}
     </div>

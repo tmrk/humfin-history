@@ -2,17 +2,17 @@ const CARDS = [
   {
     kicker: 'The source',
     title: 'One archive, one century',
-    body: 'Everything here comes from a single dataset: the appeals of the International Federation of Red Cross and Red Crescent Societies, recorded in its GO platform back to 1919. It is a proxy for the world’s appetite for humanitarian giving — not a tally of all humanitarian spending.',
+    body: 'Everything here comes from a single dataset: the appeals of the International Federation of Red Cross and Red Crescent Societies, recorded in its GO platform back to 1919. It is a proxy for the world’s appetite for humanitarian giving, not a tally of all humanitarian spending.',
   },
   {
     kicker: 'The two lines',
     title: 'Asked is not given',
-    body: '“Requested” is what an appeal asked for at launch; “funded” is what donors actually contributed. The gap between the two is the story of most years — though about a hundred appeals in the record were funded beyond their ask.',
+    body: '“Requested” is what an appeal asked for at launch; “funded” is what donors actually contributed. The gap between the two is the story of most years, though about a hundred appeals in the record were funded beyond their ask.',
   },
   {
     kicker: 'Before 1994',
     title: 'A century of asks, thirty years of answers',
-    body: 'GO records what donors gave only from 1994 onwards; every earlier appeal carries a zero. By default the chart substitutes the requested amount for those years — bear in mind that donors may have covered less than what was asked.',
+    body: 'GO records what donors gave only from 1994 onwards; every earlier appeal carries a zero. By default the chart substitutes the requested amount for those years; bear in mind that donors may have covered less than what was asked.',
   },
   {
     kicker: 'The gaps',
@@ -22,7 +22,7 @@ const CARDS = [
   {
     kicker: 'The francs',
     title: 'What “2025 francs” means',
-    body: 'Appeals are denominated in Swiss francs, so amounts are adjusted with the Swiss consumer price index, chained across its base series back to 1914. That measures Swiss purchasing power — a deliberate simplification, kept consistent across the whole century.',
+    body: 'Appeals are denominated in Swiss francs, so amounts are adjusted with the Swiss consumer price index, chained across its base series back to 1914. That measures Swiss purchasing power, a deliberate simplification kept consistent across the whole century.',
   },
   {
     kicker: 'The instruments',

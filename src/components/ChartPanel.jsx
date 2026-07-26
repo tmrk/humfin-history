@@ -29,7 +29,7 @@ function ChartPanel({ yearlyTotals, error, onRetry }) {
         given, <strong style={{ color: REQUESTED_COLOR, fontWeight: 500 }}>blue</strong> is
         money asked for. Amounts are shown in {lastYearInCPIdata} francs by default, so a
         1923 appeal and a 2023 appeal can be compared honestly. The dots mark the crises
-        behind the spikes — tap one, or browse the timeline below the chart.
+        behind the spikes: tap one, or browse the timeline below the chart.
       </p>
 
       <div className="chart-panel">
@@ -120,7 +120,7 @@ function ChartPanel({ yearlyTotals, error, onRetry }) {
                     <span /><span /><span /><span /><span />
                   </div>
                   <p className="chart-wait__caption">
-                    Fetching 4,200+ appeals from IFRC GO — usually a few seconds.
+                    Fetching 4,200+ appeals from IFRC GO. This usually takes a few seconds.
                   </p>
                 </>
               )}
@@ -132,7 +132,7 @@ function ChartPanel({ yearlyTotals, error, onRetry }) {
           <p className="chart-note">
             <span className="chart-note__flag">Note</span>
             <span>
-              GO holds no funding records before {FIRST_YEAR_WITH_FUNDING_DATA} —{' '}
+              GO holds no funding records before {FIRST_YEAR_WITH_FUNDING_DATA}, so{' '}
               {substitutePre1994
                 ? 'the red series shows the amount requested for those years.'
                 : 'the red series drops to the recorded zeros for those years.'}{' '}
