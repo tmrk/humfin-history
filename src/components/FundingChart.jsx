@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Area,
   AreaChart,
@@ -13,7 +13,14 @@ import {
 import { FIRST_YEAR_WITH_FUNDING_DATA } from '../lib/appeals';
 import { lastYearInCPIdata } from '../lib/inflation';
 import { formatAmount, formatCompact } from '../lib/format';
-import { FUNDED_COLOR, REQUESTED_COLOR } from '../lib/colors';
+import { EVENT_COLOR, FUNDED_COLOR, REQUESTED_COLOR } from '../lib/colors';
+
+const AREA_ANIMATION = {
+  animationDuration: 700,
+  animationEasing: 'ease-in-out',
+  animationMatchBy: (point) => point.payload.year,
+  isAnimationActive: 'auto',
+};
 
 const AXIS_TICK = {
   fill: 'rgba(243, 238, 232, 0.55)',
@@ -50,8 +57,8 @@ const EventPin = ({ viewBox, event, index, active, onSelect }) => {
       <circle r={13} fill="transparent" />
       <circle
         r={active ? 6 : 4.5}
-        fill={active ? FUNDED_COLOR : '#131015'}
-        stroke={active ? FUNDED_COLOR : 'rgba(243, 238, 232, 0.6)'}
+        fill={active ? EVENT_COLOR : '#131015'}
+        stroke={active ? EVENT_COLOR : 'rgba(240, 228, 66, 0.75)'}
         strokeWidth={1.5}
       />
     </g>
@@ -79,7 +86,9 @@ const ChartTooltip = ({ active, payload, label, inflationAdjusted, substitutePre
           <span className="tip__name">
             <span className="tip__dot" style={{ background: entry.color }} />
             {entry.name}
-            {entry.dataKey === 'amountFundedAndRequestedPre1994' && preCutoff ? '*' : ''}
+            {entry.dataKey === 'amountFundedDisplayed' && preCutoff && substitutePre1994
+              ? '*'
+              : ''}
           </span>
           <span className="tip__val">
             {formatAmount(entry.value)} {unit}
@@ -111,16 +120,24 @@ function FundingChart({
   inflationAdjusted,
 }) {
   const narrow = useIsNarrow();
+  const displayedData = useMemo(
+    () =>
+      data.map((row) => ({
+        ...row,
+        amountFundedDisplayed: substitutePre1994
+          ? row.amountFundedAndRequestedPre1994
+          : row.amountFunded,
+      })),
+    [data, substitutePre1994]
+  );
 
-  const firstYear = data[0].year;
-  const lastYear = data[data.length - 1].year;
+  const firstYear = displayedData[0].year;
+  const lastYear = displayedData[displayedData.length - 1].year;
   const step = narrow ? 20 : 10;
   const ticks = [];
   for (let year = Math.ceil(firstYear / step) * step; year <= lastYear; year += step) {
     ticks.push(year);
   }
-
-  const fundedKey = substitutePre1994 ? 'amountFundedAndRequestedPre1994' : 'amountFunded';
 
   // On narrow screens the pins would collide in the dense 2004-2023 cluster,
   // so the rail below the chart is the event browser there and the chart only
@@ -135,7 +152,7 @@ function FundingChart({
               key={`${event.id}-span`}
               x1={event.span[0]}
               x2={event.span[1]}
-              fill={active ? 'rgba(255, 43, 32, 0.09)' : 'rgba(243, 238, 232, 0.05)'}
+              fill={active ? 'rgba(240, 228, 66, 0.1)' : 'rgba(240, 228, 66, 0.04)'}
               strokeOpacity={0}
             />
           );
@@ -145,7 +162,7 @@ function FundingChart({
           <ReferenceLine
             key={event.id}
             x={event.year}
-            stroke={active ? FUNDED_COLOR : 'rgba(243, 238, 232, 0.28)'}
+            stroke={active ? EVENT_COLOR : 'rgba(240, 228, 66, 0.32)'}
             strokeDasharray={active ? '0' : '2 5'}
             label={
               narrow ? undefined : (
@@ -160,7 +177,7 @@ function FundingChart({
 
   return (
     <ResponsiveContainer>
-      <AreaChart data={data} margin={{ top: 44, right: 10, left: 4, bottom: 2 }}>
+      <AreaChart data={displayedData} margin={{ top: 44, right: 10, left: 4, bottom: 2 }}>
         <defs>
           <linearGradient id="gradFunded" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={FUNDED_COLOR} stopOpacity={0.5} />
@@ -188,6 +205,7 @@ function FundingChart({
         />
         {showRequested ? (
           <Area
+            id="requested-area"
             type="monotone"
             dataKey="amountRequested"
             name="Requested"
@@ -195,17 +213,20 @@ function FundingChart({
             strokeWidth={2}
             fill="url(#gradRequested)"
             activeDot={{ r: 4 }}
+            {...AREA_ANIMATION}
           />
         ) : null}
         {showFunded ? (
           <Area
+            id="funded-area"
             type="monotone"
-            dataKey={fundedKey}
+            dataKey="amountFundedDisplayed"
             name="Funded"
             stroke={FUNDED_COLOR}
             strokeWidth={2}
             fill="url(#gradFunded)"
             activeDot={{ r: 4 }}
+            {...AREA_ANIMATION}
           />
         ) : null}
         {eventMarks}

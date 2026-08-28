@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import Events from '../events.json';
 import FundingChart from './FundingChart';
-import { FUNDED_COLOR, REQUESTED_COLOR } from '../lib/colors';
+import { EVENT_COLOR, FUNDED_COLOR, REQUESTED_COLOR } from '../lib/colors';
 import EventRail from './EventRail';
 import { adjustRowsForInflation, FIRST_YEAR_WITH_FUNDING_DATA } from '../lib/appeals';
 import { lastYearInCPIdata } from '../lib/inflation';
@@ -65,6 +65,7 @@ function ChartPanel({ yearlyTotals, error, onRetry }) {
                 setSelectedEventId(null);
               }}
             >
+              <span className="chip__dot" style={{ background: EVENT_COLOR }} />
               Timeline events
             </button>
           </div>

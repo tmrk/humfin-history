@@ -1,7 +1,7 @@
 /* ---------------------------------------------------------------------------
    Design tokens
    Palette validated for CVD safety on the dark surface:
-   funded = IFRC red #FF2B20, requested = #2E9FCB (see chart series).
+   funded = IFRC red #FF2B20, requested = #2E9FCB, events = #F0E442.
 --------------------------------------------------------------------------- */
 
 :root {
@@ -16,6 +16,7 @@
   --red-mark: #ff2b20;     /* chart series + interactive highlights */
   --red-text: #ff6a5f;     /* red that passes contrast for small text */
   --blue-mark: #2e9fcb;    /* "requested" series */
+  --event-mark: #f0e442;   /* timeline events */
   --serif: 'Noto Serif', Georgia, 'Times New Roman', serif;
   --sans: 'Noto Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: 'Noto Sans Mono', ui-monospace, 'SF Mono', Menlo, monospace;
@@ -512,8 +513,8 @@ a:hover {
 }
 
 .rail__card.is-active {
-  border-color: var(--red-mark);
-  background: rgba(255, 43, 32, 0.08);
+  border-color: var(--event-mark);
+  background: rgba(240, 228, 66, 0.08);
 }
 
 .rail__year {
@@ -521,7 +522,7 @@ a:hover {
   font-family: var(--mono);
   font-size: 0.74rem;
   letter-spacing: 0.08em;
-  color: var(--red-text);
+  color: var(--event-mark);
 }
 
 .rail__title {
@@ -621,7 +622,9 @@ a:hover {
 }
 
 .table-wrap {
-  overflow-x: auto;
+  max-height: min(68vh, 680px);
+  overflow: auto;
+  scrollbar-gutter: stable;
   border: 1px solid var(--hairline);
   border-radius: 12px;
   background: var(--surface-deep);
@@ -636,12 +639,16 @@ a:hover {
 }
 
 .ledger-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   text-align: left;
   font-weight: 500;
   font-size: 0.68rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--mute);
+  background: var(--surface-deep);
   padding: 0.7rem 0.8rem;
   border-bottom: 1px solid var(--hairline);
 }
