@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import BgVideo from '../assets/bgvideo.mp4';
 import Poster from '../assets/bgvideo.png';
 import { adjustRowsForInflation } from '../lib/appeals';
@@ -10,6 +10,44 @@ const prefersReducedMotion =
   window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
 function Hero({ appeals, yearlyTotals }) {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return undefined;
+
+    // Set both properties before play() so Chromium treats the decorative
+    // video as inaudible even if attribute reflection is delayed.
+    video.defaultMuted = true;
+    video.muted = true;
+
+    const playVideo = () => {
+      const playAttempt = video.play();
+      playAttempt?.catch(() => {
+        // Edge can defer autoplay until the page receives an interaction.
+        // The listeners below provide that retry without exposing controls
+        // for a decorative video.
+      });
+    };
+
+    const removeInteractionRetries = () => {
+      window.removeEventListener('pointerdown', playVideo);
+      window.removeEventListener('keydown', playVideo);
+    };
+
+    video.addEventListener('canplay', playVideo, { once: true });
+    video.addEventListener('playing', removeInteractionRetries, { once: true });
+    window.addEventListener('pointerdown', playVideo, { once: true });
+    window.addEventListener('keydown', playVideo, { once: true });
+    playVideo();
+
+    return () => {
+      video.removeEventListener('canplay', playVideo);
+      video.removeEventListener('playing', removeInteractionRetries);
+      removeInteractionRetries();
+    };
+  }, []);
+
   const stats = useMemo(() => {
     if (!appeals || !yearlyTotals.length) return null;
     const adjusted = adjustRowsForInflation(yearlyTotals);
@@ -35,11 +73,13 @@ function Hero({ appeals, yearlyTotals }) {
         />
       ) : (
         <video
+          ref={videoRef}
           className="hero__video"
           autoPlay
           playsInline
           loop
           muted
+          preload="auto"
           poster={Poster}
           aria-hidden="true"
         >
