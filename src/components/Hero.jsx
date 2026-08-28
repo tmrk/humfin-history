@@ -4,10 +4,20 @@ import Poster from '../assets/bgvideo.png';
 import { adjustRowsForInflation } from '../lib/appeals';
 import { lastYearInCPIdata } from '../lib/inflation';
 import { formatCompact } from '../lib/format';
+import RollingNumber from './RollingNumber';
 
 const prefersReducedMotion =
   typeof window !== 'undefined' &&
   window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+const LoadingDots = () => (
+  <span className="loading-dots" role="status">
+    <span className="visually-hidden">Loading</span>
+    <span aria-hidden="true">.</span>
+    <span aria-hidden="true">.</span>
+    <span aria-hidden="true">.</span>
+  </span>
+);
 
 function Hero({ appeals, yearlyTotals }) {
   const videoRef = useRef(null);
@@ -100,15 +110,25 @@ function Hero({ appeals, yearlyTotals }) {
         </p>
         <dl className="hero__stats">
           <div className="hero__stat">
-            <dd>{stats ? stats.count.toLocaleString('en-GB') : '…'}</dd>
+            <dd>
+              {stats ? <RollingNumber value={stats.count.toLocaleString('en-GB')} /> : <LoadingDots />}
+            </dd>
             <dt>appeals recorded</dt>
           </div>
           <div className="hero__stat">
-            <dd>{stats ? stats.lastYear - stats.firstYear : '…'}</dd>
+            <dd>
+              {stats ? <RollingNumber value={stats.lastYear - stats.firstYear} /> : <LoadingDots />}
+            </dd>
             <dt>years of records</dt>
           </div>
           <div className="hero__stat">
-            <dd>{stats ? `${formatCompact(stats.peakValue)} CHF` : '…'}</dd>
+            <dd>
+              {stats ? (
+                <RollingNumber value={`${formatCompact(stats.peakValue)} CHF`} />
+              ) : (
+                <LoadingDots />
+              )}
+            </dd>
             <dt>
               {stats
                 ? `asked in ${stats.peakYear}, the peak year (${lastYearInCPIdata} francs)`

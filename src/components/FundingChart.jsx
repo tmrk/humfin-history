@@ -9,6 +9,7 @@ import {
   Tooltip,
   XAxis,
   YAxis,
+  matchByDataKey,
 } from 'recharts';
 import { FIRST_YEAR_WITH_FUNDING_DATA } from '../lib/appeals';
 import { lastYearInCPIdata } from '../lib/inflation';
@@ -16,10 +17,10 @@ import { formatAmount, formatCompact } from '../lib/format';
 import { EVENT_COLOR, FUNDED_COLOR, REQUESTED_COLOR } from '../lib/colors';
 
 const AREA_ANIMATION = {
-  animationDuration: 700,
+  animationBegin: 0,
+  animationDuration: 1100,
   animationEasing: 'ease-in-out',
-  animationMatchBy: (point) => point.payload.year,
-  isAnimationActive: 'auto',
+  animationMatchBy: matchByDataKey('year'),
 };
 
 const AXIS_TICK = {
@@ -39,6 +40,19 @@ const useIsNarrow = () => {
     return () => query.removeEventListener('change', onChange);
   }, []);
   return narrow;
+};
+
+const usePrefersReducedMotion = () => {
+  const [reduced, setReduced] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
+  useEffect(() => {
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const onChange = (event) => setReduced(event.matches);
+    query.addEventListener('change', onChange);
+    return () => query.removeEventListener('change', onChange);
+  }, []);
+  return reduced;
 };
 
 // Small clickable marker rendered in the top margin, above each event line.
@@ -120,6 +134,7 @@ function FundingChart({
   inflationAdjusted,
 }) {
   const narrow = useIsNarrow();
+  const prefersReducedMotion = usePrefersReducedMotion();
   const displayedData = useMemo(
     () =>
       data.map((row) => ({
@@ -214,6 +229,7 @@ function FundingChart({
             fill="url(#gradRequested)"
             activeDot={{ r: 4 }}
             {...AREA_ANIMATION}
+            isAnimationActive={!prefersReducedMotion}
           />
         ) : null}
         {showFunded ? (
@@ -227,6 +243,7 @@ function FundingChart({
             fill="url(#gradFunded)"
             activeDot={{ r: 4 }}
             {...AREA_ANIMATION}
+            isAnimationActive={!prefersReducedMotion}
           />
         ) : null}
         {eventMarks}
